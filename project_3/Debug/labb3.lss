@@ -1,0 +1,255 @@
+
+labb3.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         000001ca  00000000  00000000  00000054  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .stab         00000378  00000000  00000000  00000220  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  2 .stabstr      0000062c  00000000  00000000  00000598  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 2a 00 	jmp	0x54	; 0x54 <__ctors_end>
+   4:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+   8:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+   c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  10:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  14:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  18:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  1c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  20:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  24:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  28:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  2c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  30:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  34:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  38:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  3c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  40:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  44:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  48:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  4c:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+  50:	0c 94 34 00 	jmp	0x68	; 0x68 <__bad_interrupt>
+
+00000054 <__ctors_end>:
+  54:	11 24       	eor	r1, r1
+  56:	1f be       	out	0x3f, r1	; 63
+  58:	cf e5       	ldi	r28, 0x5F	; 95
+  5a:	d8 e0       	ldi	r29, 0x08	; 8
+  5c:	de bf       	out	0x3e, r29	; 62
+  5e:	cd bf       	out	0x3d, r28	; 61
+  60:	0e 94 36 00 	call	0x6c	; 0x6c <main>
+  64:	0c 94 e3 00 	jmp	0x1c6	; 0x1c6 <_exit>
+
+00000068 <__bad_interrupt>:
+  68:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+0000006c <main>:
+
+#include <util/delay.h>
+#include "DIO.h"
+#include "BIT_MATH.h"
+
+int main(void){
+  6c:	df 93       	push	r29
+  6e:	cf 93       	push	r28
+  70:	cd b7       	in	r28, 0x3d	; 61
+  72:	de b7       	in	r29, 0x3e	; 62
+SET_BIT(DDRA,DIO_u8PIN0);  // led1 o/p
+  74:	ab e3       	ldi	r26, 0x3B	; 59
+  76:	b0 e0       	ldi	r27, 0x00	; 0
+  78:	eb e3       	ldi	r30, 0x3B	; 59
+  7a:	f0 e0       	ldi	r31, 0x00	; 0
+  7c:	80 81       	ld	r24, Z
+  7e:	81 60       	ori	r24, 0x01	; 1
+  80:	8c 93       	st	X, r24
+SET_BIT(DDRA,DIO_u8PIN1);  // led2 o/p
+  82:	ab e3       	ldi	r26, 0x3B	; 59
+  84:	b0 e0       	ldi	r27, 0x00	; 0
+  86:	eb e3       	ldi	r30, 0x3B	; 59
+  88:	f0 e0       	ldi	r31, 0x00	; 0
+  8a:	80 81       	ld	r24, Z
+  8c:	82 60       	ori	r24, 0x02	; 2
+  8e:	8c 93       	st	X, r24
+CLR_BIT(DDRB,DIO_u8PIN0);  // sw1 i/p
+  90:	a7 e3       	ldi	r26, 0x37	; 55
+  92:	b0 e0       	ldi	r27, 0x00	; 0
+  94:	e7 e3       	ldi	r30, 0x37	; 55
+  96:	f0 e0       	ldi	r31, 0x00	; 0
+  98:	80 81       	ld	r24, Z
+  9a:	8e 7f       	andi	r24, 0xFE	; 254
+  9c:	8c 93       	st	X, r24
+CLR_BIT(DDRB,DIO_u8PIN1);  // sw2 i/p
+  9e:	a7 e3       	ldi	r26, 0x37	; 55
+  a0:	b0 e0       	ldi	r27, 0x00	; 0
+  a2:	e7 e3       	ldi	r30, 0x37	; 55
+  a4:	f0 e0       	ldi	r31, 0x00	; 0
+  a6:	80 81       	ld	r24, Z
+  a8:	8d 7f       	andi	r24, 0xFD	; 253
+  aa:	8c 93       	st	X, r24
+CLR_BIT(DDRB,DIO_u8PIN2);  // sw3 i/p
+  ac:	a7 e3       	ldi	r26, 0x37	; 55
+  ae:	b0 e0       	ldi	r27, 0x00	; 0
+  b0:	e7 e3       	ldi	r30, 0x37	; 55
+  b2:	f0 e0       	ldi	r31, 0x00	; 0
+  b4:	80 81       	ld	r24, Z
+  b6:	8b 7f       	andi	r24, 0xFB	; 251
+  b8:	8c 93       	st	X, r24
+PORTB=0b00000111;          //sw1,sw2,sw3 pull up
+  ba:	e8 e3       	ldi	r30, 0x38	; 56
+  bc:	f0 e0       	ldi	r31, 0x00	; 0
+  be:	87 e0       	ldi	r24, 0x07	; 7
+  c0:	80 83       	st	Z, r24
+PORTA=0;                   // led1,led2 off
+  c2:	ea e3       	ldi	r30, 0x3A	; 58
+  c4:	f0 e0       	ldi	r31, 0x00	; 0
+  c6:	10 82       	st	Z, r1
+while(1){
+	if(GET_BIT(PINB,DIO_u8PIN0)==0&&GET_BIT(PINB,DIO_u8PIN1)!=0&&GET_BIT(PINB,DIO_u8PIN2)!=0){
+  c8:	e6 e3       	ldi	r30, 0x36	; 54
+  ca:	f0 e0       	ldi	r31, 0x00	; 0
+  cc:	80 81       	ld	r24, Z
+  ce:	88 2f       	mov	r24, r24
+  d0:	90 e0       	ldi	r25, 0x00	; 0
+  d2:	81 70       	andi	r24, 0x01	; 1
+  d4:	90 70       	andi	r25, 0x00	; 0
+  d6:	00 97       	sbiw	r24, 0x00	; 0
+  d8:	01 f5       	brne	.+64     	; 0x11a <main+0xae>
+  da:	e6 e3       	ldi	r30, 0x36	; 54
+  dc:	f0 e0       	ldi	r31, 0x00	; 0
+  de:	80 81       	ld	r24, Z
+  e0:	86 95       	lsr	r24
+  e2:	88 2f       	mov	r24, r24
+  e4:	90 e0       	ldi	r25, 0x00	; 0
+  e6:	81 70       	andi	r24, 0x01	; 1
+  e8:	90 70       	andi	r25, 0x00	; 0
+  ea:	98 2f       	mov	r25, r24
+  ec:	81 e0       	ldi	r24, 0x01	; 1
+  ee:	89 27       	eor	r24, r25
+  f0:	88 23       	and	r24, r24
+  f2:	99 f4       	brne	.+38     	; 0x11a <main+0xae>
+  f4:	e6 e3       	ldi	r30, 0x36	; 54
+  f6:	f0 e0       	ldi	r31, 0x00	; 0
+  f8:	80 81       	ld	r24, Z
+  fa:	86 95       	lsr	r24
+  fc:	86 95       	lsr	r24
+  fe:	88 2f       	mov	r24, r24
+ 100:	90 e0       	ldi	r25, 0x00	; 0
+ 102:	81 70       	andi	r24, 0x01	; 1
+ 104:	90 70       	andi	r25, 0x00	; 0
+ 106:	98 2f       	mov	r25, r24
+ 108:	81 e0       	ldi	r24, 0x01	; 1
+ 10a:	89 27       	eor	r24, r25
+ 10c:	88 23       	and	r24, r24
+ 10e:	29 f4       	brne	.+10     	; 0x11a <main+0xae>
+		PORTA=0b00000001;
+ 110:	ea e3       	ldi	r30, 0x3A	; 58
+ 112:	f0 e0       	ldi	r31, 0x00	; 0
+ 114:	81 e0       	ldi	r24, 0x01	; 1
+ 116:	80 83       	st	Z, r24
+ 118:	d7 cf       	rjmp	.-82     	; 0xc8 <main+0x5c>
+	}
+	else if(GET_BIT(PINB,DIO_u8PIN1)==0&&GET_BIT(PINB,DIO_u8PIN0)!=0&&GET_BIT(PINB,DIO_u8PIN2)!=0){
+ 11a:	e6 e3       	ldi	r30, 0x36	; 54
+ 11c:	f0 e0       	ldi	r31, 0x00	; 0
+ 11e:	80 81       	ld	r24, Z
+ 120:	86 95       	lsr	r24
+ 122:	88 2f       	mov	r24, r24
+ 124:	90 e0       	ldi	r25, 0x00	; 0
+ 126:	81 70       	andi	r24, 0x01	; 1
+ 128:	90 70       	andi	r25, 0x00	; 0
+ 12a:	00 97       	sbiw	r24, 0x00	; 0
+ 12c:	f9 f4       	brne	.+62     	; 0x16c <main+0x100>
+ 12e:	e6 e3       	ldi	r30, 0x36	; 54
+ 130:	f0 e0       	ldi	r31, 0x00	; 0
+ 132:	80 81       	ld	r24, Z
+ 134:	88 2f       	mov	r24, r24
+ 136:	90 e0       	ldi	r25, 0x00	; 0
+ 138:	81 70       	andi	r24, 0x01	; 1
+ 13a:	90 70       	andi	r25, 0x00	; 0
+ 13c:	98 2f       	mov	r25, r24
+ 13e:	81 e0       	ldi	r24, 0x01	; 1
+ 140:	89 27       	eor	r24, r25
+ 142:	88 23       	and	r24, r24
+ 144:	99 f4       	brne	.+38     	; 0x16c <main+0x100>
+ 146:	e6 e3       	ldi	r30, 0x36	; 54
+ 148:	f0 e0       	ldi	r31, 0x00	; 0
+ 14a:	80 81       	ld	r24, Z
+ 14c:	86 95       	lsr	r24
+ 14e:	86 95       	lsr	r24
+ 150:	88 2f       	mov	r24, r24
+ 152:	90 e0       	ldi	r25, 0x00	; 0
+ 154:	81 70       	andi	r24, 0x01	; 1
+ 156:	90 70       	andi	r25, 0x00	; 0
+ 158:	98 2f       	mov	r25, r24
+ 15a:	81 e0       	ldi	r24, 0x01	; 1
+ 15c:	89 27       	eor	r24, r25
+ 15e:	88 23       	and	r24, r24
+ 160:	29 f4       	brne	.+10     	; 0x16c <main+0x100>
+		PORTA=0b00000010;
+ 162:	ea e3       	ldi	r30, 0x3A	; 58
+ 164:	f0 e0       	ldi	r31, 0x00	; 0
+ 166:	82 e0       	ldi	r24, 0x02	; 2
+ 168:	80 83       	st	Z, r24
+ 16a:	ae cf       	rjmp	.-164    	; 0xc8 <main+0x5c>
+	}
+	else if(GET_BIT(PINB,DIO_u8PIN2)==0&&GET_BIT(PINB,DIO_u8PIN0)!=0&&GET_BIT(PINB,DIO_u8PIN1)!=0){
+ 16c:	e6 e3       	ldi	r30, 0x36	; 54
+ 16e:	f0 e0       	ldi	r31, 0x00	; 0
+ 170:	80 81       	ld	r24, Z
+ 172:	86 95       	lsr	r24
+ 174:	86 95       	lsr	r24
+ 176:	88 2f       	mov	r24, r24
+ 178:	90 e0       	ldi	r25, 0x00	; 0
+ 17a:	81 70       	andi	r24, 0x01	; 1
+ 17c:	90 70       	andi	r25, 0x00	; 0
+ 17e:	00 97       	sbiw	r24, 0x00	; 0
+ 180:	f1 f4       	brne	.+60     	; 0x1be <main+0x152>
+ 182:	e6 e3       	ldi	r30, 0x36	; 54
+ 184:	f0 e0       	ldi	r31, 0x00	; 0
+ 186:	80 81       	ld	r24, Z
+ 188:	88 2f       	mov	r24, r24
+ 18a:	90 e0       	ldi	r25, 0x00	; 0
+ 18c:	81 70       	andi	r24, 0x01	; 1
+ 18e:	90 70       	andi	r25, 0x00	; 0
+ 190:	98 2f       	mov	r25, r24
+ 192:	81 e0       	ldi	r24, 0x01	; 1
+ 194:	89 27       	eor	r24, r25
+ 196:	88 23       	and	r24, r24
+ 198:	91 f4       	brne	.+36     	; 0x1be <main+0x152>
+ 19a:	e6 e3       	ldi	r30, 0x36	; 54
+ 19c:	f0 e0       	ldi	r31, 0x00	; 0
+ 19e:	80 81       	ld	r24, Z
+ 1a0:	86 95       	lsr	r24
+ 1a2:	88 2f       	mov	r24, r24
+ 1a4:	90 e0       	ldi	r25, 0x00	; 0
+ 1a6:	81 70       	andi	r24, 0x01	; 1
+ 1a8:	90 70       	andi	r25, 0x00	; 0
+ 1aa:	98 2f       	mov	r25, r24
+ 1ac:	81 e0       	ldi	r24, 0x01	; 1
+ 1ae:	89 27       	eor	r24, r25
+ 1b0:	88 23       	and	r24, r24
+ 1b2:	29 f4       	brne	.+10     	; 0x1be <main+0x152>
+		PORTA=0b00000011;
+ 1b4:	ea e3       	ldi	r30, 0x3A	; 58
+ 1b6:	f0 e0       	ldi	r31, 0x00	; 0
+ 1b8:	83 e0       	ldi	r24, 0x03	; 3
+ 1ba:	80 83       	st	Z, r24
+ 1bc:	85 cf       	rjmp	.-246    	; 0xc8 <main+0x5c>
+	}
+	else{
+		PORTA=0;
+ 1be:	ea e3       	ldi	r30, 0x3A	; 58
+ 1c0:	f0 e0       	ldi	r31, 0x00	; 0
+ 1c2:	10 82       	st	Z, r1
+ 1c4:	81 cf       	rjmp	.-254    	; 0xc8 <main+0x5c>
+
+000001c6 <_exit>:
+ 1c6:	f8 94       	cli
+
+000001c8 <__stop_program>:
+ 1c8:	ff cf       	rjmp	.-2      	; 0x1c8 <__stop_program>
